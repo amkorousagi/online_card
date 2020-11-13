@@ -1,0 +1,50 @@
+/*
+use knucard;
+create table customer(
+	id varchar(20) not null,
+    pw varchar(20) not null,
+    token varchar(20) default null,
+    token_timeout date default null,
+    nickname varchar(20) not null,
+    
+    primary key(id)
+) default charset=utf8;
+
+create table card(
+	name varchar(20),
+    address varchar(20),
+    phone_number varchar(20),
+    face_photo blob,
+    description varchar(20),
+    card_id varchar(20),
+    
+    primary key(card_id)
+)default charset=utf8;
+
+alter table customer add column card_id varchar(20) default null;
+create table friend_list(
+	my_id varchar(20),
+    friends_cards varchar(20),
+    
+    primary key(my_id)
+)default charset=utf8;
+
+alter table customer
+add
+foreign key(card_id)
+references card(card_id);
+
+alter table friend_list
+add
+foreign key(my_id)
+references customer(id);
+
+alter table friend_list
+add foreign key(friends_cards)
+references card(card_id);
+
+commit;
+*/
+show tables;
+
+
