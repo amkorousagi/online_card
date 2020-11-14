@@ -1,38 +1,44 @@
 class Join{
-    conn;
-
-    constructor(conn){
-        this.conn = conn;
+    
+    execute = async (pool, id, pw, nickname, res) =>{
+        try {
+            const connection = await pool.getConnection(async conn => conn);
+            try {
+                await connection.beginTransaction(); // START TRANSACTION
+               
+                const [rows] = await connection.execute(
+                    
+                    `INSERT INTO customer (id, pw, nickname) VALUES ('${id}', '${pw}', '${nickname}')`
+                    );
+                await connection.commit(); // COMMIT
+                connection.release();
+                console.log(rows);
+                res.send(rows);
+            } catch(err) {
+                await connection.rollback(); // ROLLBACK
+                connection.release();
+                console.log('Query Error');
+                res.send('Query Error');
+            }
+        } catch(err) {
+            console.log('DB Error');
+            res.send('DB Error');
+        }
     }
+   
 
     
-
-    execute_promise(param){
-        return new Promise(function(resolve, reject){
-
-            conn.connect();
-            conn.query('SELECT 1 + 1 AS solution', 
-            function (error, results, fields) {
-            if (error) throw error;
-            console.log('The solution is: ', results[0].solution);
-            });
-            
-            resolve(param);
-        }
-        );
-    }
-
-    execute(id, pw, res){
-
-        this.execute_promise({"conn": this.conn, "id":id, "pw":pw, "res": res})
-        .then(r => function(r){
-            console.log(r3);
-        })
-        .catch((err)=>{
-            console.log(err)
-            res.json({err:err.toString()});
-        })
-    }
 }
 
 module.exports  = Join;
+
+/* success
+{
+fieldCount: 0,
+affectedRows: 1,
+insertId: 0,
+info: "",
+serverStatus: 3,
+warningStatus: 0
+}
+*/

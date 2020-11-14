@@ -43,6 +43,10 @@ alter table friend_list
 add foreign key(friends_cards)
 references card(card_id);
 
+
+alter table customer
+modify column token varchar(20) unique;
+
 commit;
 */
 show tables;

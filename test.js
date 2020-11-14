@@ -1,12 +1,6 @@
-//client --(id,pw)--> this
-//this --(sessioc token)--> client
-
 class Test{
     
-   
-
-    execute(pool,res){
-
+    execute = async (pool, res) =>{
         try {
             const connection = await pool.getConnection(async conn => conn);
             try {
@@ -27,6 +21,9 @@ class Test{
             return false;
         }
     }
+   
+
+    
 }
 
 module.exports  = Test;

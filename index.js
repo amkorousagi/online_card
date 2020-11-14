@@ -4,6 +4,9 @@ var express = require("express");
 var bodyParser = require('body-parser');
 var db_config = require("./db_config.json");
 var test = require("./test");
+var join = require("./join");
+var login_by_id = require("./login_by_id");
+var login_by_token = require("./login_by_token");
 
 var app = express();
 app.use(bodyParser.json());
@@ -15,37 +18,29 @@ var pool = mysql.createPool({
     password : db_config.password,
     database: db_config.database
 });
-const test_instance = new test(pool);
+const test_instance = new test();
+const join_instance = new join();
+const login_by_id_instance = new login_by_id();
+const login_by_token_instance = new login_by_token();
 
-//execute
-//insert
-//https://m.blog.naver.com/n_jihyeon/221806066778
-//join
-//login
 
-app.get("/", async (req,res)=>{
-   /*
-    try {
-        const connection = await pool.getConnection(async conn => conn);
-        try {
-            await connection.beginTransaction(); // START TRANSACTION
-            const [rows] = await connection.query('SELECT 1 + 1 AS solution');
-            await connection.commit(); // COMMIT
-            connection.release();
-            console.log(rows);
-            res.send(rows);
-        } catch(err) {
-            await connection.rollback(); // ROLLBACK
-            connection.release();
-            console.log('Query Error');
-            return false;
-        }
-    } catch(err) {
-        console.log('DB Error');
-        return false;
-    }
-    */
+app.get("/", (req,res)=>{
    test_instance.execute(pool, res);
+});
+
+app.get("/join", (req,res) =>{
+    const {id,pw,nickname} = req.query;
+    join_instance.execute(pool, id, pw, nickname, res);
+});
+
+app.get("/login_by_id", (req,res) =>{
+    const {id,pw} = req.query;
+    login_by_id_instance.execute(pool, id, pw, res);
+});
+
+app.get("/login_by_token", (req,res) =>{
+    const {token} = req.query
+    login_by_token_instance.execute(pool, token, res);
 });
 
 app.listen(5000, "0.0.0.0", function(){
