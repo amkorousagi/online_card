@@ -1,6 +1,4 @@
-var randomstring = require("randomstring");
-
-class Login_by_id{
+class Login_by_token{
     
     execute = async (pool, token, res) =>{
         try {
@@ -8,13 +6,13 @@ class Login_by_id{
             await connection.beginTransaction(); // START TRANSACTION
 
             try {
+                //is there row having such token?
                 const queryString01 = `SELECT * FROM customer
                 WHERE token = ?
                 `;
                 let result = await connection.execute(queryString01, [token]);
-
+                console.log(result);
                 if(result[0].length == 0) {
-                    console.log("0");
                     throw new Error("such token not exists")
                 }
             
@@ -26,7 +24,6 @@ class Login_by_id{
                 }
                 await connection.commit(); // COMMIT
                 connection.release();
-                console.log(result);
                 res.json({'success':1,'verbose':result});
             } catch(err) {
                 await connection.rollback(); // ROLLBACK
@@ -44,7 +41,7 @@ class Login_by_id{
     
 }
 
-module.exports  = Login_by_id;
+module.exports  = Login_by_token;
 
 /* success
 {
