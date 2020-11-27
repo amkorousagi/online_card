@@ -55,16 +55,18 @@ class Login_by_id{
                 
                 await connection.commit(); // COMMIT
                 connection.release();
-                res.json({'success':1,'verbose':result03});
+                res.json(token);
             } catch(err) {
+                //query error
                 await connection.rollback(); // ROLLBACK
                 connection.release();
                 console.log(err.toString());
-                res.json({'success':0,'verbose':['Query Error',err.toString()]});
+                res.status(400).json(err.toString());
             }
         } catch(err) {
+            //db error
             console.log(err.toString());
-            res.json({'success':0,'verbose':['DB Error',err.toString()]});
+            res.status(400).json(err.toString());
         }
     }
    
@@ -73,14 +75,3 @@ class Login_by_id{
 }
 
 module.exports  = Login_by_id;
-
-/* success
-{
-fieldCount: 0,
-affectedRows: 1,
-insertId: 0,
-info: "",
-serverStatus: 3,
-warningStatus: 0
-}
-*/

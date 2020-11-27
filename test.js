@@ -17,7 +17,8 @@ class Test{
                 return false;
             }
         } catch(err) {
-            console.log('DB Error');
+            console.log('DB Error2');
+            console.log(err.toString())
             return false;
         }
     }
