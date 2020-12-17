@@ -23,7 +23,7 @@ class Friend_read{
                 const result2 = await connection.execute(
                     `
                     select friends_cards  from friend_list
-                    where card_id = ?
+                    where my_id = ?
                     `,
                     [result[0][0].id]
                 );
