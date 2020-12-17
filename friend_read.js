@@ -1,6 +1,6 @@
-class Card_create{
+class Friend_read{
     
-    execute = async (pool,token, name, address, phone_number, url, description, res) =>{
+    execute = async (pool,token, res) =>{
         try {
   
             const connection = await pool.getConnection(async conn => conn);
@@ -8,36 +8,24 @@ class Card_create{
 
             try {
                 await connection.beginTransaction(); // START TRANSACTION
-               
-                console.log("tran begin end", name, address, phone_number, url, description);
 
-                const result0 = await connection.execute(
+                const result = await connection.execute(
                     `
                     select * from customer
                     where token = ?
                     `,
                     [token]
                 );
-                if(result0[0].length == 0) {
-                    throw new Error("such token not exists")
-                }
-
-
-                const result = await connection.execute(
-                    `INSERT INTO card (name, address, phone_number, face_photo, description) VALUES (?, ?, ?, ?, ?)`,
-                    [name, address, phone_number, url, description]
-                );
                 if(result[0].length == 0) {
-                    throw new Error("wrong query as inserting card")
+                    throw new Error("such token not exists")
                 }
 
                 const result2 = await connection.execute(
                     `
-                    update customer
-                    set card_id = ?
-                    where token = ?
+                    select friends_cards  from friend_list
+                    where card_id = ?
                     `,
-                    [result[0].insertId, token]
+                    [result[0].id]
                 );
                 if(result2[0].length == 0) {
                     throw new Error("wrong query as updating customer")
@@ -64,4 +52,4 @@ class Card_create{
     
 }
 
-module.exports  = Card_create;
+module.exports  = Friend_read;

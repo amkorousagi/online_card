@@ -1,6 +1,6 @@
-class Card_create{
+class Friend_set{
     
-    execute = async (pool,token, name, address, phone_number, url, description, res) =>{
+    execute = async (pool,token, friend_card, res) =>{
         try {
   
             const connection = await pool.getConnection(async conn => conn);
@@ -24,13 +24,13 @@ class Card_create{
 
 
                 const result = await connection.execute(
-                    `INSERT INTO card (name, address, phone_number, face_photo, description) VALUES (?, ?, ?, ?, ?)`,
-                    [name, address, phone_number, url, description]
+                    `INSERT INTO friend_list (my_id, friends_cards) VALUES (?, ?)`,
+                    [result0[0].id, friend_card]
                 );
                 if(result[0].length == 0) {
-                    throw new Error("wrong query as inserting card")
+                    throw new Error("wrong query as inserting friends")
                 }
-
+                /*
                 const result2 = await connection.execute(
                     `
                     update customer
@@ -42,10 +42,10 @@ class Card_create{
                 if(result2[0].length == 0) {
                     throw new Error("wrong query as updating customer")
                 }
-
+                */
                 await connection.commit(); // COMMIT
                 connection.release();
-                res.json(result2[0]);
+                res.json([result0[0].id, friend_card]);
             } catch(err) {
                 //query error
                 await connection.rollback(); // ROLLBACK
@@ -64,4 +64,4 @@ class Card_create{
     
 }
 
-module.exports  = Card_create;
+module.exports  = Friend_set;

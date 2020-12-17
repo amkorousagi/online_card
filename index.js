@@ -12,6 +12,9 @@ var card_create = require("./card_create");
 var card_read = require("./card_read");
 var card_update = require("./card_update");
 var card_delete = require("./card_delete");
+var friend_read = require("./friend_read");
+var friend_set = require("./friend_set");
+var firend_unset = require("./friend_unset");
 
 var app = express();
 app.use(bodyParser.json());
@@ -31,7 +34,9 @@ const card_create_instance = new card_create();
 const card_read_instance = new card_read();
 const card_update_instance = new card_update();
 const card_delete_instance = new card_delete();
-
+const friend_read_instance = new friend_read();
+const friend_set_instance = new friend_set();
+const friend_unset_instance = new firend_unset();
 
 
 app.get("/", (req,res)=>{
@@ -101,6 +106,44 @@ app.post("/card_create", (req, res) => {
     console.log(name);
     card_create_instance.execute(pool,token, name, address, phone_number,url, description, res);
 });
+
+app.get("/card_id",(req,res)=>{
+    const {card_id} = req.query;
+    res.json(card_id);
+})
+
+app.post("/card_id",(req,res)=>{
+    const {card_id} = req.body;
+    res.json(card_id);
+})
+
+app.get("/friend_read",(req,res)=>{
+    const {token} = req.query;
+    friend_read_instance.execute(pool, token, res);
+})
+
+app.post("/friend_read",(req,res)=>{
+    const {token} = req.body;
+    friend_read_instance.execute(pool, token, res);
+})
+app.get("/friend_set",(req,res)=>{
+    const {token, friend_card} = req.query;
+    friend_set_instance.execute(pool, token, friend_card, res);
+})
+
+app.post("/friend_set",(req,res)=>{
+    const {token, friend_card} = req.body;
+    friend_set_instance.execute(pool, token, friend_card, res);
+})
+app.get("/friend_unset",(req,res)=>{
+    const {token, friend_card} = req.query;
+    friend_unset_instance.execute(pool, token, friend_card, res);
+})
+
+app.post("/friend_unset",(req,res)=>{
+    const {token, friend_card} = req.body;
+    friend_unset_instance.execute(pool, token, friend_card, res);
+})
 
 app.listen(5001, "0.0.0.0", function(){
     console.log("server is running.. in 5001");
