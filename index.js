@@ -112,12 +112,12 @@ app.post("/card_create", (req, res) => {
 
 app.get("/card_id",(req,res)=>{
     const {token} = req.query;
-    get_card_id_instance(pool, token, res);
+    get_card_id_instance.execute(pool, token, res);
 })
 
 app.post("/card_id",(req,res)=>{
     const {token} = req.body;
-    get_card_id_instance(pool, token, res);
+    get_card_id_instance.execute(pool, token, res);
 })
 
 app.get("/friend_read",(req,res)=>{
