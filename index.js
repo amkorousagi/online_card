@@ -17,6 +17,7 @@ var card_delete = require("./card_delete");
 var friend_read = require("./friend_read");
 var friend_set = require("./friend_set");
 var firend_unset = require("./friend_unset");
+var get_card_id = require("./card_id");
 
 var app = express();
 app.use(bodyParser.json());
@@ -39,7 +40,7 @@ const card_delete_instance = new card_delete();
 const friend_read_instance = new friend_read();
 const friend_set_instance = new friend_set();
 const friend_unset_instance = new firend_unset();
-
+const get_card_id_instance = new get_card_id();
 
 app.get("/", (req,res)=>{
     test_instance.execute(pool, res);
@@ -110,13 +111,13 @@ app.post("/card_create", (req, res) => {
 });
 
 app.get("/card_id",(req,res)=>{
-    const {card_id} = req.query;
-    res.json(card_id);
+    const {token} = req.query;
+    get_card_id_instance(pool, token, res);
 })
 
 app.post("/card_id",(req,res)=>{
-    const {card_id} = req.body;
-    res.json(card_id);
+    const {token} = req.body;
+    get_card_id_instance(pool, token, res);
 })
 
 app.get("/friend_read",(req,res)=>{
