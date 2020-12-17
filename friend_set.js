@@ -9,7 +9,7 @@ class Friend_set{
             try {
                 await connection.beginTransaction(); // START TRANSACTION
                
-                console.log("tran begin end", name, address, phone_number, url, description);
+                //console.log("tran begin end", name, address, phone_number, url, description);
 
                 const result0 = await connection.execute(
                     `
