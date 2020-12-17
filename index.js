@@ -2,8 +2,10 @@ var mysql      = require('mysql2/promise');
 var request = require("request")
 var express = require("express");
 var fs = require('fs');
+var path = require('path');
 var bodyParser = require('body-parser');
 var db_config = require("./db_config.json");
+const HTTPS = require('https');
 var test = require("./test");
 var join = require("./join");
 var login_by_id = require("./login_by_id");
@@ -144,8 +146,18 @@ app.post("/friend_unset",(req,res)=>{
     const {token, friend_card} = req.body;
     friend_unset_instance.execute(pool, token, friend_card, res);
 })
+try {
+    const option = {
+      ca: fs.readFileSync('/etc/letsencrypt/live/knulmsmodule2.cf/fullchain.pem'),
+      key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/knulmsmodule2.cf/privkey.pem'), 'utf8').toString(),
+      cert: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/knulmsmodule2.cf/cert.pem'), 'utf8').toString(),
+    };
+  
+    HTTPS.createServer(option, app).listen(5001, () => {
+      console.log(`[HTTPS] Soda Server is started on port 5001`);
+    });
+  } catch (error) {
+    console.log(error.toString());
+  }
 
-app.listen(5001, "0.0.0.0", function(){
-    console.log("server is running.. in 5001");
-});
 //PdYw6j80oKvVp2D7aZ6
