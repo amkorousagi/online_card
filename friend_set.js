@@ -21,7 +21,7 @@ class Friend_set{
                 if(result0[0].length == 0) {
                     throw new Error("such token not exists")
                 }
-
+                console.log(result0[0]);
 
                 const result = await connection.execute(
                     `INSERT INTO friend_list (my_id, friends_cards) VALUES (?, ?)`,
