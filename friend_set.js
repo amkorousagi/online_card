@@ -25,7 +25,7 @@ class Friend_set{
 
                 const result = await connection.execute(
                     `INSERT INTO friend_list (my_id, friends_cards) VALUES (?, ?)`,
-                    [result0[0].id, friend_card]
+                    [result0[0][0].id, friend_card]
                 );
                 if(result[0].length == 0) {
                     throw new Error("wrong query as inserting friends")
@@ -45,7 +45,7 @@ class Friend_set{
                 */
                 await connection.commit(); // COMMIT
                 connection.release();
-                res.json([result0[0].id, friend_card]);
+                res.json([result0[0][0].id, friend_card]);
             } catch(err) {
                 //query error
                 await connection.rollback(); // ROLLBACK

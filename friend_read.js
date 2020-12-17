@@ -25,7 +25,7 @@ class Friend_read{
                     select friends_cards  from friend_list
                     where card_id = ?
                     `,
-                    [result[0].id]
+                    [result[0][0].id]
                 );
                 if(result2[0].length == 0) {
                     throw new Error("wrong query as updating customer")

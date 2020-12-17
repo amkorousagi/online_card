@@ -26,7 +26,7 @@ class Friend_unset{
                     delete from friend_list
                     where my_id = ?
                     `,
-                    [result[0].id]
+                    [result[0][0].id]
                 );
                 if(result3[0].length == 0) {
                     throw new Error("failed to delete card id")
@@ -35,7 +35,7 @@ class Friend_unset{
 
                 await connection.commit(); // COMMIT
                 connection.release();
-                res.json(result[0].id);
+                res.json(result[0][0].id);
             } catch(err) {
                 //query error
                 await connection.rollback(); // ROLLBACK
